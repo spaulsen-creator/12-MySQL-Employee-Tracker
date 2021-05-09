@@ -46,18 +46,17 @@ const start = () => {
                 addEmployee();
             } else if (answer.main === 'View roles') {
                 addRoles();
-            } 
-            
-                
-
-            //     default:
-            //         console.log(`Invalid action: ${answer.action}`);
-            //         break;
-            // }
+            }
         });
 };
 
-const artistSearch = () => {
+const departmentSearch = () => {
+    connection.query('SELECT * FROM department', (err, res) => {
+        if (err) throw err;
+        console.table('ALL departments', res);
+        start();
+    });
+};
     inquirer
         .prompt({
             name: 'artist',
