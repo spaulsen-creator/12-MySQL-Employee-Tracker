@@ -12,10 +12,10 @@ const connection = mysql.createConnection({
 
 connection.connect((err) => {
     if (err) throw err;
-    runSearch();
+    start();
 });
 
-const runSearch = () => {
+const start = () => {
     inquirer
         .prompt({
             name: 'action',
@@ -24,40 +24,36 @@ const runSearch = () => {
             choices: [
                 'View departments',
                 'View roles',
-                'View a employee',
-                'Add a department',
-                'Add a role',
-                'Add a employee',
-                'Update a employee role',
-                'Exit',
+                'View employee',
+                'Add department',
+                'Add role',
+                'Add employee',
+                'Update employee role',
             ],
         })
         .then((answer) => {
-            switch (answer.action) {
-                case '':
-                    artistSearch();
-                    break;
+            if (answer.main === 'View departments') {
+                departmentSearch();
+            } else if (answer.main === 'View roles') {
+                rolesSearch();
+            } else if (answer.main === 'View employee') {
+                employeeSearch();
+            } else if (answer.main === 'Add department ') {
+                addDepartment();
+            } else if (answer.main === 'Add roles') {
+                addRoles();
+            } else if (answer.main === 'Add employee') {
+                addEmployee();
+            } else if (answer.main === 'View roles') {
+                addRoles();
+            } 
+            
+                
 
-                case 'Find all artists who appear more than once':
-                    multiSearch();
-                    break;
-
-                case 'Find data within a specific range':
-                    rangeSearch();
-                    break;
-
-                case 'Search for a specific song':
-                    songSearch();
-                    break;
-
-                case 'Find artists with a top song and top album in the same year':
-                    songAndAlbumSearch();
-                    break;
-
-                default:
-                    console.log(`Invalid action: ${answer.action}`);
-                    break;
-            }
+            //     default:
+            //         console.log(`Invalid action: ${answer.action}`);
+            //         break;
+            // }
         });
 };
 

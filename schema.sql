@@ -38,8 +38,8 @@ CREATE TABLE employee(
 --         ON DELETE CASCADE
     
 );
-SELECT * FROM employee_DB;
-SELECT * FROM employee_DB.employee;
-SELECT * FROM employee_DB.employeerole;
-SELECT * FROM employee_DB.department
+-- SELECT * FROM employee_DB;
+-- SELECT * FROM employee_DB.employee;
+-- SELECT * FROM employee_DB.employeerole;
+-- SELECT * FROM employee_DB.department
 
