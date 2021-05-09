@@ -43,15 +43,3 @@ SELECT * FROM employee_DB.employee;
 SELECT * FROM employee_DB.employeerole;
 SELECT * FROM employee_DB.department
 
---Join examples from mySQL documentation
-
--- SELECT * FROM table1, table2;
-
--- SELECT * FROM table1 INNER JOIN table2 ON table1.id = table2.id;
-
--- SELECT * FROM table1 LEFT JOIN table2 ON table1.id = table2.id;
-
--- SELECT * FROM table1 LEFT JOIN table2 USING (id);
-
--- SELECT * FROM table1 LEFT JOIN table2 ON table1.id = table2.id
---   LEFT JOIN table3 ON table2.id = table3.id;

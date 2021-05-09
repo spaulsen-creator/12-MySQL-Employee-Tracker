@@ -10,12 +10,12 @@ const connection = mysql.createConnection({
     database: 'employee_DB',
 });
 
-// connection.connect((err) => {
-//     if (err) throw err;
-//     runSearch();
-// });
+connection.connect((err) => {
+    if (err) throw err;
+    runSearch();
+});
 
-const start = () => {
+const runSearch = () => {
     inquirer
         .prompt({
             name: 'action',
