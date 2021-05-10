@@ -33,13 +33,17 @@ CREATE TABLE employee(
     FOREIGN KEY (role_id)
         REFERENCES role(id)
         ON DELETE CASCADE
-	-- FOREIGN KEY (manager_id)
---         REFERENCES manager(id)
---         ON DELETE CASCADE
+	FOREIGN KEY (manager_id)
+        REFERENCES manager(id)
+        ON DELETE CASCADE
     
 );
+
+
 -- SELECT * FROM employee_DB;
 -- SELECT * FROM employee_DB.employee;
 -- SELECT * FROM employee_DB.employeerole;
 -- SELECT * FROM employee_DB.department
 
+-- SELECT * FROM employee JOIN role ON employee.role_id=role.id JOIN department on department.id = role.department_id
+-- WHERE department_id = 3;    Whatever # department id =

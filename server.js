@@ -10,16 +10,16 @@ const connection = mysql.createConnection({
     database: 'employee_DB',
 });
 
-connection.connect((err) => {
-    if (err) throw err;
-    start();
-});
+// connection.connect((err) => {
+//     if (err) throw err;
+//     start();
+// });
 
 const start = () => {
     inquirer
         .prompt({
-            name: 'action',
-            type: 'rawlist',
+            name: 'mainMenu',
+            type: 'list',
             message: 'What would you like to do?',
             choices: [
                 'View departments',
@@ -29,23 +29,51 @@ const start = () => {
                 'Add role',
                 'Add employee',
                 'Update employee role',
+                'Exit',
             ],
         })
         .then((answer) => {
-            if (answer.main === 'View departments') {
-                departmentSearch();
-            } else if (answer.main === 'View roles') {
-                rolesSearch();
-            } else if (answer.main === 'View employee') {
-                employeeSearch();
-            } else if (answer.main === 'Add department ') {
-                addDepartment();
-            } else if (answer.main === 'Add roles') {
-                addRoles();
-            } else if (answer.main === 'Add employee') {
-                addEmployee();
-            } else if (answer.main === 'View roles') {
-                addRoles();
+            // if (answer.main === 'View departments') {
+            //     departmentSearch();
+            // } else if (answer.main === 'View roles') {
+            //     rolesSearch();
+            // } else if (answer.main === 'View employee') {
+            //     employeeSearch();
+            // } else if (answer.main === 'Add department ') {
+            //     addDepartment();
+            // } else if (answer.main === 'Add roles') {
+            //     addRole();
+            // } else if (answer.main === 'Add employee') {
+            //     addEmployee();
+            // } else if (answer.main === 'Update role') {
+            //     editRole();
+            // }
+            switch (answer.mainMenu) {
+                case 'View departments':
+                    departmentSearch();
+                    break;
+                case 'View Roles':
+                    rolesSearch();
+                    break;
+                case 'View Employee':
+                    employeeSearch();
+                    break;
+                case 'Add Department':
+                    addDepartment();
+                    break;
+                case 'Add Roles':
+                    addRole;
+                    break;
+                case 'Add Employee':
+                    addEmployee();
+                    break;
+                case 'Update Role':
+                    editRole;
+                    break;
+                case 'Exit':
+                    connection.end();
+                    break;
+
             }
         });
 };
@@ -53,148 +81,146 @@ const start = () => {
 const departmentSearch = () => {
     connection.query('SELECT * FROM department', (err, res) => {
         if (err) throw err;
-        console.table('ALL departments', res);
+        console.table('ALL department', res);
         start();
     });
 };
-    inquirer
-        .prompt({
-            name: 'artist',
-            type: 'input',
-            message: 'What artist would you like to search for?',
-        })
-        .then((answer) => {
-            const query = 'SELECT position, song, year FROM top5000 WHERE ?';
-            connection.query(query, {
-                artist: answer.artist
-            }, (err, res) => {
-                res.forEach(({
-                    position,
-                    song,
-                    year
-                }) => {
-                    console.log(
-                        `Position: ${position} || Song: ${song} || Year: ${year}`
-                    );
-                });
-                runSearch();
-            });
-        });
-};
 
-const multiSearch = () => {
-    const query =
-        'SELECT artist FROM top5000 GROUP BY artist HAVING count(*) > 1';
-    connection.query(query, (err, res) => {
-        res.forEach(({
-            artist
-        }) => console.log(artist));
-        runSearch();
+const rolesSearch = () => {
+    connection.query('SELECT * FROM role', (err, res) => {
+        if (err) throw err;
+        console.table('ALL role', res);
+        start();
     });
 };
 
-const rangeSearch = () => {
-    inquirer
-        .prompt([{
-                name: 'start',
-                type: 'input',
-                message: 'Enter starting position: ',
-                validate(value) {
-                    if (isNaN(value) === false) {
-                        return true;
-                    }
-                    return false;
-                },
-            },
-            {
-                name: 'end',
-                type: 'input',
-                message: 'Enter ending position: ',
-                validate(value) {
-                    if (isNaN(value) === false) {
-                        return true;
-                    }
-                    return false;
-                },
-            },
-        ])
-        .then((answer) => {
-            const query =
-                'SELECT position,song,artist,year FROM top5000 WHERE position BETWEEN ? AND ?';
-            connection.query(query, [answer.start, answer.end], (err, res) => {
-                res.forEach(({
-                    position,
-                    song,
-                    artist,
-                    year
-                }) => {
-                    console.log(
-                        `Position: ${position} || Song: ${song} || Artist: ${artist} || Year: ${year}`
-                    );
-                });
-                runSearch();
-            });
-        });
+const employeeSearch = () => {
+    connection.query('SELECT * FROM employee', (err, res) => {
+        if (err) throw err;
+        console.table('ALL employee', res);
+        start();
+    });
 };
 
-const songSearch = () => {
-    inquirer
-        .prompt({
-            name: 'song',
-            type: 'input',
-            message: 'What song would you like to look for?',
-        })
-        .then((answer) => {
-            console.log(answer.song);
-            connection.query(
-                'SELECT * FROM top5000 WHERE ?', {
-                    song: answer.song
+const addDepartment = () => {
+    connection.query('SELECT * FROM department', function (err, res) {
+        if (err) throw err;
+        inquirer
+            .prompt([{
+                name: 'department',
+                type: 'input',
+                message: 'Add a department',
+            }, ]).then(function (answer) {
+                connection.query(
+                    'INSERT INTO department SET ?', {
+                        name: answer.department,
+                    },
+                    function (err) {
+                        if (err) throw err;
+                        console.log('Department added');
+                        start();
+                    })
+            })
+    })
+
+};
+
+
+const addRole = () => {
+    connection.query('SELECT * FROM role', function (err, res) {
+        if (err) throw err;
+        inquirer
+            .prompt([{
+                    name: 'title',
+                    type: 'input',
+                    message: 'Add a role/title',
                 },
-                (err, res) => {
-                    if (res[0]) {
-                        console.log(
-                            `Position: ${res[0].position} || Song: ${res[0].song} || Artist: ${res[0].artist} || Year: ${res[0].year}`
-                        );
-                    } else {
-                        console.error(`No results for ${answer.song}`);
+                {
+                    name: 'salary',
+                    type: 'input',
+                    message: 'Add a salary for this role/title',
+                },
+                {
+                    name: 'department_id',
+                    type: 'input',
+                    message: 'Department id for this role/title',
+                },
+            ]).then(function (answer) {
+                connection.query(
+                    'INSERT INTO role SET ?', {
+                        title: answer.title,
+                        salary: answer.salary,
+                        department_id: answer.department_id,
+                    },
+                    function (err) {
+                        if (err) throw err;
+                        console.log('New role/title added');
+                        start();
+                    })
+            })
+    })
+};
+
+const addEmployee = () => {
+    connection.query('SELECT * FROM employee', function (err, res) {
+        if (err) throw err;
+        inquirer
+            .prompt([{
+                    name: 'first_name',
+                    type: 'input',
+                    message: 'Employee first name',
+                },
+                {
+                    name: 'last_name',
+                    type: 'input',
+                    message: 'Employee last name',
+                },
+                {
+                    name: 'manager_id',
+                    type: 'input',
+                    message: 'Employee manager id',
+                },
+                {
+                    name: 'role',
+                    type: 'list',
+                    choices: function () {
+                        var roleArray = [];
+                        for (let i = 0; i < res.length; i++) {
+                            roleArray.push(res[i].title);
+                        }
+                        return roleArray;
+                    },
+
+                    message: 'Employee role',
+                },
+
+
+            ]).then(function (answer) {
+                let role_id;
+                for (let a = 0; a < res.length; a++) {
+                    if (res[a].title == answer.role) {
+                        role_id = res[a].id;
+                        console.log(role_id)
                     }
-                    runSearch();
                 }
-            );
-        });
+                connection.query(
+                    'INSERT INTO role SET ?', {
+                        first_name: answer.first_name,
+                        last_name: answer.last_name,
+                        manager_id: answer.manager_id,
+                        role_id: role_id,
+                    },
+                    function (err) {
+                        if (err) throw err;
+                        console.log('New employee added');
+                        start();
+                    })
+            })
+    })
 };
 
-const songAndAlbumSearch = () => {
-    inquirer
-        .prompt({
-            name: 'artist',
-            type: 'input',
-            message: 'What artist would you like to search for?',
-        })
-        .then((answer) => {
-            let query =
-                'SELECT top_albums.year, top_albums.album, top_albums.position, top5000.song, top5000.artist ';
-            query +=
-                'FROM top_albums INNER JOIN top5000 ON (top_albums.artist = top5000.artist AND top_albums.year ';
-            query +=
-                '= top5000.year) WHERE (top_albums.artist = ? AND top5000.artist = ?) ORDER BY top_albums.year, top_albums.position';
-
-            connection.query(query, [answer.artist, answer.artist], (err, res) => {
-                console.log(`${res.length} matches found!`);
-                res.forEach(({
-                    year,
-                    position,
-                    artist,
-                    song,
-                    album
-                }, i) => {
-                    const num = i + 1;
-                    console.log(
-                        `${num} Year: ${year} Position: ${position} || Artist: ${artist} || Song: ${song} || Album: ${album}`
-                    );
-                });
-
-                runSearch();
-            });
-        });
-};
+connection.connect((err) => {
+    if (err) throw err;
+    console.log(`connected as id ${connection.threadId}\n`);
+    start();
+});
