@@ -95,7 +95,7 @@ const rolesSearch = () => {
 };
 
 const employeeSearch = () => {
-    connection.query('SELECT * FROM employee', (err, res) => {
+    connection.query('SELECT employee.id, employee.first_name, employee.last_name, role.title,role.salary,department.department,manager_id FROM employee JOIN role ON employee.role_id=role.id JOIN department on department.id = role.department_id', (err, res) => {
         if (err) throw err;
         console.table('ALL employee', res);
         start();
